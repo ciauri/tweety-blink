@@ -5,6 +5,7 @@ import json
 
 AUTH_FILENAME = 'auth.json'
 
+#TODO: Make classier
 try:
     with open(AUTH_FILENAME) as auth_data:
         credientials = json.load(auth_data)
