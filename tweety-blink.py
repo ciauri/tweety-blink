@@ -5,6 +5,7 @@ import sys
 import json
 
 AUTH_FILENAME = 'auth.json'
+search_terms = ['#yolo','#blessed','#christmas','#christmakkuh']
 
 #TODO: Make classier
 try:
@@ -22,7 +23,7 @@ except:
 tweet_listener = listener.TweetListener()
 try:
     stream = Stream(auth=authenticator.authenticate(credentials).auth, listener=tweet_listener)
-    stream.filter(track=['#yolo','#blessed','#christmas','#christmakkuh'],async=True)
+    stream.filter(track=search_terms,async=True)
 except KeyboardInterrupt:
     tweet_listener.__exit__(0,0,0)
     print("\nGraceful shutdown successful.")

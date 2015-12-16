@@ -45,21 +45,21 @@ class TweetListener(StreamListener):
     # @asyncio.coroutine
     def lights(self, text):
         pins = []
-        if "yolo" in text:
+        if "yolo" in text: # Red
             pins.append(self.red_pin)
             self.scores['yolo'] = self.scores.get('yolo', 0) + 1
-        elif "blessed" in text:
+        elif "blessed" in text: # Blue
             pins.append(self.blue_pin)
             self.scores['blessed'] = self.scores.get('blessed', 0) + 1
-        elif "christmakkuh" in text:
+        elif "christmakkuh" in text: # Purple
             pins.append(self.blue_pin)
             pins.append(self.red_pin)
             self.scores['christmakkuh'] = self.scores.get('christmakkuh', 0) + 1
-        elif "christmas" in text:
+        elif "christmas" in text: # Green
             pins.append(self.green_pin)
             self.scores['christmas'] = self.scores.get('christmas', 0) + 1
         else:
-            print("should not reach this:")
+            print("should not reach this")
 
         if len(pins):
             self.blink(pins)
