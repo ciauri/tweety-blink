@@ -21,13 +21,12 @@ class TweetListener(StreamListener):
         GPIO.setup(green_pin, GPIO.OUT)
         GPIO.setup(blue_pin, GPIO.OUT)
         try:
-                # if "yolo" in status.text:
-                #     pin = red_pin
-                # elif "blessed" in status.text:
-                #     pin = blue_pin
-                # else:
-                #     pin = green_pin
-                pin = red_pin
+                if "yolo" in status.text:
+                    pin = red_pin
+                elif "blessed" in status.text:
+                    pin = blue_pin
+                else:
+                    pin = green_pin
 
                 GPIO.output(pin, True)  # LED on
                 time.sleep(0.5)             # delay 0.5 seconds
