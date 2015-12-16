@@ -16,4 +16,4 @@ except ValueError as e:
 
 tweet_listener = listener.TweetListener()
 stream = Stream(auth=authenticator.authenticate(credientials).auth, listener=tweet_listener)
-stream.filter(track=['#yolo'])
+stream.filter(track=['#yolo','#blessed','#christmas'])
