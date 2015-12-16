@@ -26,7 +26,6 @@ class TweetListener(StreamListener):
         # t.start()
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        print("ded")
         # self.loop.close()
         self.printScoreboard()
         GPIO.cleanup()
@@ -34,6 +33,7 @@ class TweetListener(StreamListener):
     def on_status(self, status):
         print("Tweet: {}".format(status.text).encode('utf-8','replace'))
         self.lights(status.text.lower())
+        return True
         # self.loop.run_until_complete(self.blink(status.text.lower()))
 
     def on_error(self, status_code):
@@ -104,5 +104,6 @@ class TweetListener(StreamListener):
 
 
     def printScoreboard(self):
+        print("***** SCOREBOARD *****")
         for team, score in self.scores.items():
             print("{}: \t\t{}".format(team,score))

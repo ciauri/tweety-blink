@@ -3,6 +3,7 @@ from app.listener import listener
 from tweepy import Stream
 import sys
 import json
+from time import sleep
 
 AUTH_FILENAME = 'auth.json'
 search_terms = ['#yolo','#blessed','#christmas','#christmakkuh']
@@ -21,10 +22,15 @@ except:
 
 
 tweet_listener = listener.TweetListener()
+stream = Stream(auth=authenticator.authenticate(credentials).auth, listener=tweet_listener)
+
 try:
-    stream = Stream(auth=authenticator.authenticate(credentials).auth, listener=tweet_listener)
     stream.filter(track=search_terms,async=True)
+    choice = input("Press enter to abort")
+    raise KeyboardInterrupt
 except KeyboardInterrupt:
+    stream.disconnect()
+    sleep(1)
     tweet_listener.__exit__(0,0,0)
     print("\nGraceful shutdown successful.")
 except:
