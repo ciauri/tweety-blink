@@ -14,6 +14,9 @@ class TweetListener(StreamListener):
 
     def on_status(self, status):
         print("Tweet: {}".format(status.text))
+        GPIO.setmode(GPIO.BCM)
+        red_pin = 18
+        GPIO.setup(red_pin, GPIO.OUT)
         try:
             GPIO.output(red_pin, True)  # LED on
             time.sleep(0.5)             # delay 0.5 seconds
