@@ -36,6 +36,9 @@ class TweetListener(StreamListener):
         self.lights(status.text.lower())
         # self.loop.run_until_complete(self.blink(status.text.lower()))
 
+    def on_error(self, status_code):
+        print("sheeeit")
+
     # def loop_in_thread(self, loop):
     #     asyncio.set_event_loop(loop)
 
@@ -71,6 +74,8 @@ class TweetListener(StreamListener):
         for led in leds:
             GPIO.output(led, False)
 
+    # BUG: Error in `python3': double free or corruption (fasttop):
+    # Has issues. Will cause errorless crash when sleeping.
     def pulse(self, leds):
         # Use PWM to fade an LED.
 
@@ -82,23 +87,20 @@ class TweetListener(StreamListener):
             fades.append(fade)
 
         # Set up variables for the fading effect.
-        value = 1
+        value = 100
         increment = 1
-        increasing = True
 
         while value:
             for fade in fades:
                 fade.ChangeDutyCycle(value)
 
-            if increasing:
-                value += increment
-                time.sleep(0.002)
-            else:
-                value -= increment
-                time.sleep(0.002)
+            print(value)
+            value -= increment
+            time.sleep(0.002)
 
-            if (value >= 100):
-                increasing = False
+        for fade in fades:
+            fade.stop()
+
 
 
     def printScoreboard(self):
