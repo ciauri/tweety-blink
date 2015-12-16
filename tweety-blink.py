@@ -14,6 +14,13 @@ except FileNotFoundError as e:
 except ValueError as e:
     raise ValueError("Your auth.json file is malformed")
 
+
 tweet_listener = listener.TweetListener()
-stream = Stream(auth=authenticator.authenticate(credientials).auth, listener=tweet_listener)
-stream.filter(track=['#yolo','#blessed','#christmas'])
+try:
+    stream = Stream(auth=authenticator.authenticate(credientials).auth, listener=tweet_listener)
+    stream.filter(track=['#yolo','#blessed','#christmas','#christmakkuh'])
+except KeyboardInterrupt:
+    tweet_listener.__exit__(0,0,0)
+    print("\nGraceful shutdown successful.")
+finally:
+    print("something broke")
