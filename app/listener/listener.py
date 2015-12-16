@@ -2,58 +2,74 @@ from tweepy import StreamListener
 
 import RPi.GPIO as GPIO
 import time
-import asyncio
-from threading import Thread
+# import asyncio
+# from threading import Thread
 
-# Configure the Pi to use the BCM (Broadcom) pin names, rather than the pin positions
-GPIO.setmode(GPIO.BCM)
 
-red_pin = 27
-blue_pin = 18
-green_pin = 17
 
-GPIO.setup(red_pin, GPIO.OUT)
-GPIO.setup(green_pin, GPIO.OUT)
-GPIO.setup(blue_pin, GPIO.OUT)
 
 
 class TweetListener(StreamListener):
     def __init__(self):
         StreamListener.__init__(self)
-        self.loop = asyncio.get_event_loop()
-        t = Thread(target=self.loop_in_thread, args=(self.loop,))
-        t.start()
+        self.scores = {}
+        # Configure the Pi to use the BCM (Broadcom) pin names, rather than the pin positions
+        GPIO.setmode(GPIO.BCM)
+        self.red_pin = 27
+        self.blue_pin = 18
+        self.green_pin = 17
+        GPIO.setup(self.red_pin, GPIO.OUT)
+        GPIO.setup(self.green_pin, GPIO.OUT)
+        GPIO.setup(self.blue_pin, GPIO.OUT)
+        # self.loop = asyncio.get_event_loop()
+        # t = Thread(target=self.loop_in_thread, args=(self.loop,))
+        # t.start()
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         print("ded")
-        self.loop.close()
+        # self.loop.close()
+        self.printScoreboard()
         GPIO.cleanup()
 
     def on_status(self, status):
-        print("Tweet: {}".format(status.text).encode('ascii','replace'))
-        self.loop.run_until_complete(self.blink(status.text.lower()))
+        print("Tweet: {}".format(status.text).encode('utf-8','replace'))
+        self.lights(status.text.lower())
+        # self.loop.run_until_complete(self.blink(status.text.lower()))
 
-    def loop_in_thread(self, loop):
-        asyncio.set_event_loop(loop)
+    # def loop_in_thread(self, loop):
+    #     asyncio.set_event_loop(loop)
 
-    @asyncio.coroutine
-    def blink(self, text):
+    # @asyncio.coroutine
+    def lights(self, text):
         pins = []
         if "yolo" in text:
-            pins.append(red_pin)
-            # self.pulse(red_pin)
+            pins.append(self.red_pin)
+            self.scores['yolo'] = self.scores.get('yolo', 0) + 1
         elif "blessed" in text:
-            # self.pulse(blue_pin)
-            pins.append(blue_pin)
+            pins.append(self.blue_pin)
+            self.scores['blessed'] = self.scores.get('blessed', 0) + 1
         elif "christmakkuh" in text:
-            # self.pulse(red_pin)
-            pins.append(blue_pin)
-            pins.append(red_pin)
+            pins.append(self.blue_pin)
+            pins.append(self.red_pin)
+            self.scores['christmakkuh'] = self.scores.get('christmakkuh', 0) + 1
         elif "christmas" in text:
-            # self.pulse(green_pin)
-            pins.append(green_pin)
+            pins.append(self.green_pin)
+            self.scores['christmas'] = self.scores.get('christmas', 0) + 1
+        else:
+            print("should not reach this:")
 
-        self.pulse(pins)
+        if len(pins):
+            self.blink(pins)
+            # self.pulse(pins)
+
+    def blink(self, leds):
+        for led in leds:
+            GPIO.output(led, True)  # LED on
+
+        time.sleep(0.1)
+
+        for led in leds:
+            GPIO.output(led, False)
 
     def pulse(self, leds):
         # Use PWM to fade an LED.
@@ -66,13 +82,11 @@ class TweetListener(StreamListener):
             fades.append(fade)
 
         # Set up variables for the fading effect.
-        value = 0
-        increment = 2
+        value = 1
+        increment = 1
         increasing = True
-        count = 0
 
-        while count < 1000:
-
+        while value:
             for fade in fades:
                 fade.ChangeDutyCycle(value)
 
@@ -80,12 +94,13 @@ class TweetListener(StreamListener):
                 value += increment
                 time.sleep(0.002)
             else:
-                if not value:
-                    break
                 value -= increment
                 time.sleep(0.002)
 
             if (value >= 100):
                 increasing = False
 
-            count += 1
+
+    def printScoreboard(self):
+        for team, score in self.scores.items():
+            print("{}: \t\t{}".format(team,score))
