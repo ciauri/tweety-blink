@@ -15,15 +15,15 @@ GPIO.setup(red_pin, GPIO.OUT)
 class TweetListener(StreamListener):
 
     def on_status(self, status):
-        print("Tweet: {}".format(status.text))
+        print("Tweet: {}".format(status.text).encode('utf-8'))
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(red_pin, GPIO.OUT)
         GPIO.setup(green_pin, GPIO.OUT)
         GPIO.setup(blue_pin, GPIO.OUT)
         try:
-                if "#yolo" in status.text:
+                if "yolo" in status.text:
                     pin = red_pin
-                elif "#blessed" in status.text:
+                elif "blessed" in status.text:
                     pin = blue_pin
                 else:
                     pin = green_pin
