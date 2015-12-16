@@ -7,3 +7,7 @@ You must add your own twitter developer authentication credentials into an 'auth
 ## Schematic
 Credit to "fritzing" for providing a schematic for the LED's
 ![alt text](https://raw.githubusercontent.com/geerlingguy/raspberry-pi-dramble/master/images/rgb-led-wiring.jpg "Schematic")
+
+## TODO
+- Pass search keywords through command line args
+- Catch keyboard interrupts better
