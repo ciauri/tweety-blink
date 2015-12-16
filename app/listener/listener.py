@@ -29,7 +29,7 @@ class TweetListener(StreamListener):
                     pin = green_pin
 
                 GPIO.output(pin, True)  # LED on
-                time.sleep(0.5)             # delay 0.5 seconds
+                time.sleep(0.25)             # delay 0.5 seconds
                 GPIO.output(pin, False) # LED off
         finally:
                 print("Cleaning up")
