@@ -21,9 +21,9 @@ class TweetListener(StreamListener):
         GPIO.setup(green_pin, GPIO.OUT)
         GPIO.setup(blue_pin, GPIO.OUT)
         try:
-                if "yolo" in status.text:
+                if "yolo" in status.text.lower():
                     pin = red_pin
-                elif "blessed" in status.text:
+                elif "blessed" in status.text.lower():
                     pin = blue_pin
                 else:
                     pin = green_pin
