@@ -8,7 +8,7 @@ from time import sleep
 AUTH_FILENAME = 'auth.json'
 search_terms = ['#yolo','#blessed','#christmas','#christmakkuh']
 
-#TODO: Make classier
+#TODO: Make classierer
 try:
     with open(AUTH_FILENAME) as auth_data:
         credentials = json.load(auth_data)
